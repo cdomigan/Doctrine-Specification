@@ -42,7 +42,11 @@ class OrderBy implements QueryModifier
         if ($this->dqlAlias !== null) {
             $dqlAlias = $this->dqlAlias;
         }
-
-        $qb->addOrderBy(sprintf('%s.%s', $dqlAlias, $this->field), $this->order);
+        if ($dqlAlias === '') { # Support for aliased fields
+            $qb->addOrderBy(sprintf('%s', $this->field), $this->order);
+        }
+        else {
+            $qb->addOrderBy(sprintf('%s.%s', $dqlAlias, $this->field), $this->order);
+        }
     }
 }
