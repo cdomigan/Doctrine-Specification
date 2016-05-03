@@ -5,6 +5,7 @@ namespace Happyr\DoctrineSpecification;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Happyr\DoctrineSpecification\Filter\Filter;
 use Happyr\DoctrineSpecification\Query\QueryModifier;
 
@@ -30,6 +31,14 @@ trait EntitySpecificationRepositoryTrait
     {
         $query = $this->getQuery($specification, $modifier);
 
+        return $query->execute();
+    }
+
+    public function matchPage($specification, int $page, Result\ResultModifier $modifier = null)
+    {
+        $query = $this->getQuery($specification, $modifier);
+        $pageSize = $query->getMaxResults();
+        $query->setFirstResult(($page - 1) * $pageSize);
         return $query->execute();
     }
 
