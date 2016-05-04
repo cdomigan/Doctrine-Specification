@@ -3,6 +3,7 @@
 namespace Happyr\DoctrineSpecification\Logic;
 
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\AbstractQuery;
 use Happyr\DoctrineSpecification\Filter\Filter;
 use Happyr\DoctrineSpecification\Query\QueryModifier;
 use Happyr\DoctrineSpecification\Specification\Specification;
@@ -67,6 +68,15 @@ class LogicX implements Specification
         foreach ($this->children as $child) {
             if ($child instanceof QueryModifier) {
                 $child->modify($query, $dqlAlias);
+            }
+        }
+    }
+    
+    public function modifyResult(AbstractQuery $query)
+    {
+        foreach ($this->children as $child) {
+            if (method_exists($child, 'modifyResult')) { # Have to use method_exists, as ResultModifier uses modify() which clashes with QueryModifier behaviour
+                $child->modifyResult($query);
             }
         }
     }

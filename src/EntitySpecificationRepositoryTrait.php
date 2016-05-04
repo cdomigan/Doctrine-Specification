@@ -99,6 +99,13 @@ trait EntitySpecificationRepositoryTrait
         $this->applySpecification($qb, $specification);
         $query = $qb->getQuery();
 
+        # CDOMIGAN
+        # Allow specs to modify results
+        if (method_exists($specification, 'modifyResult')) { # Have to use method_exists, as ResultModifier uses modify() which clashes with QueryModifier behaviour
+            $specification->modifyResult($query);
+        }
+        # END CDOMIGAN
+
         if ($modifier !== null) {
             $modifier->modify($query);
         }
