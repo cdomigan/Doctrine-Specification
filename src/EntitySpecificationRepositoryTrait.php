@@ -95,16 +95,15 @@ trait EntitySpecificationRepositoryTrait
      */
     public function getQuery($specification, Result\ResultModifier $modifier = null)
     {
-        $qb = $this->createQueryBuilder($this->alias);
+        $qb = $this->_em->createQueryBuilder()
+            ->from($this->_entityName, $this->getAlias()); # We make sure there is no default select, which allows for full composibility.
         $this->applySpecification($qb, $specification);
         $query = $qb->getQuery();
 
-        # CDOMIGAN
         # Allow specs to modify results
         if (method_exists($specification, 'modifyResult')) { # Have to use method_exists, as ResultModifier uses modify() which clashes with QueryModifier behaviour
             $specification->modifyResult($query);
         }
-        # END CDOMIGAN
 
         if ($modifier !== null) {
             $modifier->modify($query);
