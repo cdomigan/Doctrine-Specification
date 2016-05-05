@@ -3,6 +3,7 @@
 namespace Happyr\DoctrineSpecification;
 
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\AbstractQuery;
 use Happyr\DoctrineSpecification\Filter\Filter;
 use Happyr\DoctrineSpecification\Query\QueryModifier;
 use Happyr\DoctrineSpecification\Specification\Specification;
@@ -60,6 +61,14 @@ abstract class BaseSpecification implements Specification
         $spec = $this->getSpec();
         if ($spec instanceof QueryModifier) {
             $spec->modify($qb, $this->getAlias($dqlAlias));
+        }
+    }
+
+    public function modifyResult(AbstractQuery $query)
+    {
+        $spec = $this->getSpec();
+        if (method_exists($spec, 'modifyResult')) {
+            $spec->modifyResult($query);
         }
     }
 
