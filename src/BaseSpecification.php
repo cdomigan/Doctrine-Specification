@@ -45,29 +45,47 @@ abstract class BaseSpecification implements Specification
      * @param $filter
      * @param BaseSpecification|null $spec
      */
-    public function registerFilter($filter, BaseSpecification $spec = null)
+    public function registerFilter($filter, BaseSpecification $forwardedSpec = null)
     {
-        $spec = $spec ?: $this;
+        if (isset($forwardedSpec)) {
+            if ($forwardedSpec->hasRegisteredFilter($filter)) {
+                $spec = $forwardedSpec->getRegisteredFilter($filter);
+            }
+            else {
+                throw new \Exception('Filter '.$filter.' is not registered on forwarded Spec');
+            }
+        }
+        else {
+            $spec = $this;
+        }
         $this->registeredFilters[$filter] = $spec;
     }
 
     /**
      * Register (and forward) all filters from the given spec, into this spec.
-     * @param BaseSpecification $spec
+     * @param BaseSpecification $forwardedSpec
      */
-    public function registerFiltersFromSpec(BaseSpecification $spec)
+    public function registerFiltersFromSpec(BaseSpecification $forwardedSpec)
     {
-        foreach ($spec->getRegisteredFilters() as $filter) {
+        foreach ($forwardedSpec->getAllRegisteredFilters() as $filter => $spec) {
             $this->registerFilter($filter, $spec);
         }
     }
     
-    public function getRegisteredFilters()
+    public function getRegisteredFilter($filter)
+    {
+        if ($this->isFilterRegistered($filter)) {
+            return $this->registeredFilters[$filter];
+        }
+        else throw new \Exception('Filter '.$filter.' is not registered');
+    }
+
+    public function getAllRegisteredFilters()
     {
         return $this->registeredFilters;
     }
 
-    public function isFilterRegistered($filter)
+    public function hasRegisteredFilter($filter)
     {
         return array_key_exists($filter, $this->registeredFilters);
     }
@@ -81,9 +99,8 @@ abstract class BaseSpecification implements Specification
     {
         if ($this->isFilterRegistered($filter)) {
             $this->registeredFilters[$filter]->doSetFilterValue($filter, $value);
-            return true;
         }
-        else return false;
+        else throw new \Exception('Filter '.$filter.' is not registered');
     }
 
     public function doSetFilterValue($filter, $value)
@@ -96,7 +113,7 @@ abstract class BaseSpecification implements Specification
         if ($this->hasFilterValue($filter)) {
             return $this->filterValues[$filter];
         }
-
+        else throw new \Exception('Filter value for '.$filter.' not found');
     }
 
     /**
