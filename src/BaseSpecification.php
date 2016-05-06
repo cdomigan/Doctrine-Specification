@@ -71,10 +71,10 @@ abstract class BaseSpecification implements Specification
             $this->registerFilter($filter, $spec);
         }
     }
-    
+
     public function getRegisteredFilter($filter)
     {
-        if ($this->isFilterRegistered($filter)) {
+        if ($this->hasRegisteredFilter($filter)) {
             return $this->registeredFilters[$filter];
         }
         else throw new \Exception('Filter '.$filter.' is not registered');
@@ -97,7 +97,7 @@ abstract class BaseSpecification implements Specification
 
     public function setFilterValue($filter, $value)
     {
-        if ($this->isFilterRegistered($filter)) {
+        if ($this->hasRegisteredFilter($filter)) {
             $this->registeredFilters[$filter]->doSetFilterValue($filter, $value);
         }
         else throw new \Exception('Filter '.$filter.' is not registered');
