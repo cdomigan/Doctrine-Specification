@@ -58,17 +58,17 @@ class Spec
      * Query modifier
      */
 
-    public static function join($field, $newAlias, $dqlAlias = null)
+    public static function join($field, $newAlias, $dqlAlias = null, $condition = null)
     {
         return new Join($field, $newAlias, $dqlAlias);
     }
 
-    public static function leftJoin($field, $newAlias, $dqlAlias = null)
+    public static function leftJoin($field, $newAlias, $dqlAlias = null, $condition = null)
     {
         return new LeftJoin($field, $newAlias, $dqlAlias);
     }
 
-    public static function innerJoin($field, $newAlias, $dqlAlias = null)
+    public static function innerJoin($field, $newAlias, $dqlAlias = null, $condition = null)
     {
         return new InnerJoin($field, $newAlias, $dqlAlias);
     }

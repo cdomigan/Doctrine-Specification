@@ -18,6 +18,10 @@ abstract class BaseSpecification implements Specification
      */
     private $dqlAlias = null;
 
+    private $registeredFilters = [];
+
+    private $filterValues = [];
+
     /**
      * @param string $dqlAlias
      */
@@ -34,6 +38,44 @@ abstract class BaseSpecification implements Specification
     protected function getSpec()
     {
         return;
+    }
+
+    public function registerFilter($filter, BaseSpecification $spec = null)
+    {
+        $spec = $spec ?: $this;
+        $this->registeredFilters[$filter] = $spec;
+    }
+
+    public function isFilterRegistered($filter)
+    {
+        return array_key_exists($filter, $this->registeredFilters);
+    }
+
+    public function hasFilterValue($filter)
+    {
+        return array_key_exists($filter, $this->filterValues);
+    }
+
+    public function setFilterValue($filter, $value)
+    {
+        if ($this->isFilterRegistered($filter)) {
+            $this->registeredFilters[$filter]->doSetFilterValue($filter, $value);
+            return true;
+        }
+        else return false;
+    }
+
+    public function doSetFilterValue($filter, $value)
+    {
+        $this->filterValues[$filter] = $value;
+    }
+
+    public function getFilterValue($filter)
+    {
+        if ($this->hasFilterValue($filter)) {
+            return $this->filterValues[$filter];
+        }
+
     }
 
     /**
