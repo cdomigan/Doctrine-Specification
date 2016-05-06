@@ -40,10 +40,31 @@ abstract class BaseSpecification implements Specification
         return;
     }
 
+    /**
+     * Registers a filter against this spec. Optionally forwards the filter on to another spec.
+     * @param $filter
+     * @param BaseSpecification|null $spec
+     */
     public function registerFilter($filter, BaseSpecification $spec = null)
     {
         $spec = $spec ?: $this;
         $this->registeredFilters[$filter] = $spec;
+    }
+
+    /**
+     * Register (and forward) all filters from the given spec, into this spec.
+     * @param BaseSpecification $spec
+     */
+    public function registerFiltersFromSpec(BaseSpecification $spec)
+    {
+        foreach ($spec->getRegisteredFilters() as $filter) {
+            $this->registerFilter($filter, $spec);
+        }
+    }
+    
+    public function getRegisteredFilters()
+    {
+        return $this->registeredFilters;
     }
 
     public function isFilterRegistered($filter)
