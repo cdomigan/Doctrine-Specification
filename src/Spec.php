@@ -60,17 +60,17 @@ class Spec
 
     public static function join($field, $newAlias, $dqlAlias = null, $condition = null)
     {
-        return new Join($field, $newAlias, $dqlAlias);
+        return new Join($field, $newAlias, $dqlAlias, $condition);
     }
 
     public static function leftJoin($field, $newAlias, $dqlAlias = null, $condition = null)
     {
-        return new LeftJoin($field, $newAlias, $dqlAlias);
+        return new LeftJoin($field, $newAlias, $dqlAlias, $condition);
     }
 
     public static function innerJoin($field, $newAlias, $dqlAlias = null, $condition = null)
     {
-        return new InnerJoin($field, $newAlias, $dqlAlias);
+        return new InnerJoin($field, $newAlias, $dqlAlias, $condition);
     }
 
     public static function limit($count)
