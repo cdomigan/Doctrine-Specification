@@ -30,10 +30,5 @@
         "psr-4": {
             "Happyr\\DoctrineSpecification\\": "src/"
         }
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "0.8-dev"
-        }
     }
 }
