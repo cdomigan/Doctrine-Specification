@@ -89,8 +89,15 @@ class Comparison implements Filter
         $paramName = $this->getParameterName($qb);
         $qb->setParameter($paramName, $this->value);
 
+        if ($dqlAlias === '') { # Support for aliased fields
+            $fieldString = sprintf('%s', $this->field);
+        }
+        else {
+            $fieldString = sprintf('%s.%s', $dqlAlias, $this->field);
+        }
+
         return (string) new DoctrineComparison(
-            sprintf('%s.%s', $dqlAlias, $this->field),
+            $fieldString,
             $this->operator,
             sprintf(':%s', $paramName)
         );
