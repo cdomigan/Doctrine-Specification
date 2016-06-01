@@ -1,5 +1,5 @@
 {
-    "name": "happyr/doctrine-specification",
+    "name": "primasoftware/doctrine-specification",
     "type": "library",
     "description": "Specification Pattern for your Doctrine repositories",
     "keywords": ["Doctrine", "Repository", "Specification"],
@@ -13,6 +13,10 @@
         {
             "name": "Kacper Gunia",
             "email": "kacper@gunia.me"
+        },
+        {
+            "name": "Chris Domigan",
+            "email": "chris@primasoftware.com"
         }
     ],
     "require": {
