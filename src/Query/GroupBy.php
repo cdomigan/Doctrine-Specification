@@ -35,6 +35,11 @@ class GroupBy implements QueryModifier
         if ($this->dqlAlias !== null) {
             $dqlAlias = $this->dqlAlias;
         }
-        $qb->addGroupBy(sprintf('%s.%s', $dqlAlias, $this->field));
+        if ($dqlAlias === '') { # Support for aliased fields
+            $qb->addGroupBy(sprintf('%s', $this->field));
+        }
+        else {
+            $qb->addGroupBy(sprintf('%s.%s', $dqlAlias, $this->field));
+        }
     }
 }
