@@ -22,6 +22,8 @@ abstract class BaseSpecification implements Specification
 
     private $filterValues = [];
 
+    private $sorters = [];
+
     /**
      * @param string $dqlAlias
      */
@@ -164,5 +166,31 @@ abstract class BaseSpecification implements Specification
         }
 
         return $dqlAlias;
+    }
+
+    /**
+     * @param $field
+     * @param $direction
+     */
+    public function setSorter($field, $direction)
+    {
+        $this->sorters[$field] = $direction;
+    }
+
+    /**
+     * @param $name
+     * @return bool
+     */
+    public function hasSorter($name)
+    {
+        return array_key_exists($name, $this->sorters);
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasSorters()
+    {
+        return !empty($this->sorters);
     }
 }
