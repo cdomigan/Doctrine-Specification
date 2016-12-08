@@ -193,4 +193,17 @@ abstract class BaseSpecification implements Specification
     {
         return !empty($this->sorters);
     }
+
+    /**
+     * @param $sorter
+     * @return mixed
+     * @throws \Exception
+     */
+    public function getSorterDirection($sorter)
+    {
+        if ($this->hasSorter($sorter)) {
+            return $this->sorters[$sorter];
+        }
+        else throw new \Exception('Sorter direction for '.$sorter.' not found');
+    }
 }
