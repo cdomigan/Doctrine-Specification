@@ -3,6 +3,9 @@
 namespace Happyr\DoctrineSpecification\Query;
 
 use Doctrine\ORM\QueryBuilder;
+use Happyr\DoctrineSpecification\Filter\Filter;
+use Happyr\DoctrineSpecification\Spec;
+use Happyr\DoctrineSpecification\Specification\Specification;
 
 /**
  * @author Tobias Nyholm
@@ -52,7 +55,7 @@ abstract class AbstractJoin implements QueryModifier
 
     /**
      * @param QueryBuilder $qb
-     * @param string       $dqlAlias
+     * @param string $dqlAlias
      */
     public function modify(QueryBuilder $qb, $dqlAlias)
     {
@@ -60,7 +63,15 @@ abstract class AbstractJoin implements QueryModifier
             $dqlAlias = $this->dqlAlias;
         }
 
+        if (!($this->condition instanceof Specification) && $this->condition instanceof Filter) {
+            $this->condition = Spec::andX($this->condition);
+        }
+
+        $condition = ($this->condition instanceof Specification)
+            ? (string)$this->condition->getFilter($qb, $dqlAlias)
+            : $this->condition;
+
         $join = $this->getJoinType();
-        $qb->$join(sprintf('%s.%s', $dqlAlias, $this->field), $this->newAlias, 'WITH', $this->condition);
+        $qb->$join(sprintf('%s.%s', $dqlAlias, $this->field), $this->newAlias, 'WITH', $condition);
     }
 }
