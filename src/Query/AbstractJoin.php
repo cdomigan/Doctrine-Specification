@@ -72,6 +72,11 @@ abstract class AbstractJoin implements QueryModifier
             : $this->condition;
 
         $join = $this->getJoinType();
-        $qb->$join(sprintf('%s.%s', $dqlAlias, $this->field), $this->newAlias, 'WITH', $condition);
+        if (strpos($this->field, '\\') === false) { // Check if class, as we support directly mapping Entities (handy with inheritance) //TODO: Make this implementation nicer and work across all Spec queries
+            $qb->$join(sprintf('%s.%s', $dqlAlias, $this->field), $this->newAlias, 'WITH', $condition);
+        }
+        else {
+            $qb->$join(sprintf('%s', $this->field), $this->newAlias, 'WITH', $condition);
+        }
     }
 }
