@@ -22,6 +22,8 @@ abstract class BaseSpecification implements Specification
 
     private $filterValues = [];
 
+    private $filterTypes = [];
+
     private $sorters = [];
 
     /**
@@ -97,10 +99,31 @@ abstract class BaseSpecification implements Specification
         return array_key_exists($filter, $this->filterValues);
     }
 
+    public function hasFilterType($filter)
+    {
+        return array_key_exists($filter, $this->filterTypes);
+    }
+
     public function setFilterValue($filter, $value)
     {
         if ($this->hasRegisteredFilter($filter)) {
             $this->registeredFilters[$filter]->doSetFilterValue($filter, $value);
+        }
+        else throw new \Exception('Filter '.$filter.' is not registered');
+    }
+
+    public function getFilterType($filter)
+    {
+        if ($this->hasFilterType($filter)) {
+            return $this->filterTypes[$filter];
+        }
+        else throw new \Exception('Filter type for '.$filter.' not found');
+    }
+
+    public function setFilterType($filter, $type)
+    {
+        if ($this->hasRegisteredFilter($filter)) {
+            $this->filterTypes[$filter] = $type;
         }
         else throw new \Exception('Filter '.$filter.' is not registered');
     }
